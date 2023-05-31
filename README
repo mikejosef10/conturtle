@@ -1,0 +1,104 @@
+# conturtle
+
+conturtle is a project that allows you to control the turtlesim turtle using an Xbox Kinect v1. It utilizes the Kinect depth data to convert it into a laser scan and then transforms the laser scan data into turtle velocity commands. This README file provides an overview of the project and instructions on how to set it up.
+
+## Prerequisites
+
+To use conturtle, you need to have the following installed:
+
+    ROS (Robot Operating System)
+    Kinect v1 sensor
+    freenect_stack package
+
+## Installation
+
+    Clone the conturtle repository into your ROS workspace:
+
+    bash
+
+    git clone <repository_url>
+
+    Install the freenect_stack package by following the installation instructions provided in its repository.
+
+## Launching the conturtle
+
+To start the conturtle project, you need to launch the necessary nodes. The provided launch file, conturtle.launch, handles this for you.
+
+    Open a terminal and navigate to your ROS workspace:
+
+    bash
+
+cd <path_to_your_workspace>
+
+Launch the conturtle nodes using the following command:
+
+bash
+
+    roslaunch conturtle conturtle.launch
+
+    This will start the Kinect sensor, convert depth images to laser scans, launch the turtlesim node, and run the laserscan_to_cmdVel.py script.
+
+## Understanding the Launch File
+
+The launch file conturtle.launch contains the necessary instructions to start the conturtle project. Here's a breakdown of its contents:
+
+xml
+
+<launch>
+    <include file="/home/ubuntu/catkin_ws/src/freenect_stack/freenect_launch/launch/freenect.launch">
+        <arg name="depth_registration" value="true" />
+    </include>
+
+    <node name="depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" args="image:=/camera/depth_registered/image_raw"/>
+
+    <node name="turtlesim_node" pkg="turtlesim" type="turtlesim_node" respawn="false" output="screen" />
+
+    <node name="laserscan_to_cmdVel" pkg="conturtle" type="laserscan_to_cmdVel.py" output="screen" />
+
+</launch>
+
+    The <include> tag launches the freenect stack, which starts the Kinect sensor with depth registration enabled.
+    The depthimage_to_laserscan node converts the depth image from the Kinect into a laser scan message.
+    The turtlesim_node starts the turtlesim node, which provides a simulated turtle to control.
+    The laserscan_to_cmdVel node runs the laserscan_to_cmdVel.py script, which subscribes to the laser scan data, converts it into turtle velocity commands, and publishes them to control the turtle's movement.
+
+## RVIZ
+
+    It can help to see what the kinect is seeing by checking it on rviz. Therefore just follow the following steps:
+        - Terminal 1: roslaunch conturtle conturtle.launch
+        - Terminal 2: rviz
+        - Rviz: Change Fixed Frame from map to camera_link
+        - Rviz- show pointCloud: Add PointCloud2; change Topic to /camera/depth_registered/points
+        - Rviz- show Laserscan: Add LaserScan; change Topic to /scan
+
+## Customizing the Behavior
+
+You can modify the behavior of the conturtle project by editing the laserscan_to_cmdVel.py script. Here's an overview of how it works:
+
+    The script listens to the /scan topic, which receives the laser scan data.
+    It filters out NaN values from the scan data and finds the index of the closest point.
+    Based on the closest point's coordinates, the script calculates linear and angular velocities for the turtle.
+    The velocities are published on the /turtle1/cmd_vel topic, controlling the turtle's movement.
+
+Feel free to customize the script according to your requirements.
+
+## Contributing
+
+If you would like to contribute to conturtle, please follow the guidelines provided in the CONTRIBUTING.md file in the repository.
+License
+
+conturtle is licensed under the MIT License. See the LICENSE file for more details.
+
+## Acknowledgements
+
+    The conturtle project relies on the freenect_stack package for Kinect integration.
+    The depthimage_to_laserscan node is sourced from an existing package.
+    The conturtle project was developed by Mike Josef.
+
+### Additional resources:
+
+    https://www.youtube.com/watch?v=cjC5tXpVXzE&t=207s
+
+## Contact
+
+If you have any questions, suggestions, or feedback, please contact Mike Josef at mikejosef10@gmail.com.

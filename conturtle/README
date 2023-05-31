@@ -1,9 +1,0 @@
-Vorgehen:
-Terminal 1: roslaunch conturtle conturtle.launch
-Terminal 2: rviz
-Rviz: Change Fixed Frame from map to camera_link
-Rviz- show pointCloud: Add PointCloud2; change Topic to /camera/depth_registered/points
-Rviz- show Laserscan: Add LaserScan; change Topic to /scan
-
-Quellen:
-https://www.youtube.com/watch?v=cjC5tXpVXzE&t=207s
