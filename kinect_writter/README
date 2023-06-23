@@ -1,0 +1,103 @@
+# kinect_writter
+
+kinect_writter is a project that builds upon the conturtle project, enabling you to not only control the turtlesim turtle but also write with it. It utilizes the current position of the turtle and the position of your hand based on the laserscan data to calculate the error and derive the desired velocity command using a PID controller. This README file provides an overview of the kinect_writter project and instructions on how to set it up.
+Prerequisites
+
+To use kinect_writter, you need to have the following installed:
+
+    ROS (Robot Operating System)
+    Kinect v1 sensor
+    freenect_stack package
+
+## Installation
+
+    Clone the kinect_writter repository into your ROS workspace:
+
+bash
+
+git clone <repository_url>
+
+    Install the freenect_stack package by following the installation instructions provided in its repository.
+
+## Launching kinect_writter
+
+To start the kinect_writter project, you need to launch the necessary nodes. The provided launch file, kinect_writter.launch, handles this for you.
+
+    Open a terminal and navigate to your ROS workspace:
+
+bash
+
+cd <path_to_your_workspace>
+
+    Launch the kinect_writter nodes using the following command:
+
+bash
+
+roslaunch kinect_writter kinect_writter.launch
+
+This will start the Kinect sensor, convert depth images to laser scans, launch the turtlesim node, and run the laserscan_to_cmdVel.py script.
+
+## Understanding the Launch File
+
+The launch file kinect_writter.launch contains the necessary instructions to start the kinect_writter project. Here's a breakdown of its contents:
+
+xml
+
+<launch>
+    <include file="/home/ubuntu/catkin_ws/src/freenect_stack/freenect_launch/launch/freenect.launch">
+        <arg name="depth_registration" value="true" />
+    </include>
+
+    <node name="depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" args="image:=/camera/depth_registered/image_raw"/>
+
+    <node name="turtlesim_node" pkg="turtlesim" type="turtlesim_node" respawn="false" output="screen" />
+
+    <node name="laserscan_to_cmdVel" pkg="kinect_writter" type="laserscan_to_cmdVel.py" output="screen" />
+
+</launch>
+
+    The <include> tag launches the freenect stack, which starts the Kinect sensor with depth registration enabled.
+    The depthimage_to_laserscan node converts the depth image from the Kinect into a laser scan message.
+    The turtlesim_node starts the turtlesim node, which provides a simulated turtle to control.
+    The laserscan_to_cmdVel node runs the laserscan_to_cmdVel.py script, which subscribes to the laser scan data, converts it into turtle velocity commands using a PID controller, and publishes them to control the turtle's movement.
+
+## RVIZ
+
+It can be helpful to visualize what the Kinect is seeing by using RVIZ. Follow these steps to configure RVIZ:
+
+    Terminal 1: roslaunch kinect_writter kinect_writter.launch
+    Terminal 2: rviz
+    In RVIZ, change the Fixed Frame from "map" to "camera_link".
+    To display the point cloud data from the Kinect, add a PointCloud2 visualization in RVIZ and change the topic to /camera/depth_registered/points.
+    To display the laser scan data, add a LaserScan visualization in RVIZ and change the topic to /scan.
+
+## Customizing the Behavior
+
+You can modify the behavior of the kinect_writter project by editing the laserscan_to_cmdVel.py script. Here's an overview of how it works:
+
+    The script listens to the /scan topic, which receives the laser scan data.
+    It filters out NaN values from the scan data and calculates the error based on the current position of the turtle and the position of your hand.
+    Using a PID controller, the script derives linear and angular velocities for the turtle based on the calculated error.
+    The velocities are published on the /turtle1/cmd_vel topic, controlling the turtle's movement.
+
+Feel free to customize the script according to your requirements.
+
+## Contributing
+
+If you would like to contribute to kinect_writter, please follow the guidelines provided in the CONTRIBUTING.md file in the repository.
+License
+
+kinect_writter is licensed under the MIT License. See the LICENSE file for more details.
+Acknowledgements
+
+    The kinect_writter project relies on the freenect_stack package for Kinect integration.
+    The depthimage_to_laserscan node is sourced from an existing package.
+    The kinect_writter project was developed by [Your Name].
+
+## Additional Resources
+
+    YouTube Video: Example of kinect_writter
+
+## Contact
+
+If you have any questions, suggestions, or feedback, please contact [Your Name] at [your_email@example.com].
