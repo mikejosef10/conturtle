@@ -1,0 +1,13 @@
+<launch>
+    <include file="/home/ubuntu/catkin_ws/src/freenect_stack/freenect_launch/launch/freenect.launch">
+        <arg name="depth_registration" value="true" />
+    </include>
+    
+    <node name="depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" args="image:=/camera/depth_registered/image_raw"/>
+
+    <node name="turtlesim_node" pkg="turtlesim" type="turtlesim_node" respawn="false" output="screen" />
+    
+    <node name="laserscan_to_cmdVel" pkg="kinect_writter" type="laserscan_to_cmdVel.py" output="screen" />
+
+</launch>
+
