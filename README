@@ -1,0 +1,101 @@
+# conturtle and kinect_writter
+
+This README file provides an introduction to two related projects: conturtle and kinect_writter. These projects leverage the power of ROS (Robot Operating System) and the Kinect v1 sensor to control a turtlesim turtle and enable writing with it. The projects utilize depth data from the Kinect to convert it into laser scans and transform the scan data into turtle velocity commands. This README file provides an overview of both projects, their prerequisites, installation instructions, launching procedures, customization options, and contact information.
+
+# conturtle
+
+The conturtle project focuses on controlling the turtlesim turtle using an Xbox Kinect v1. By harnessing the Kinect's depth data, it converts the data into laser scans and utilizes the scan data to control the turtle's movement. The conturtle project provides a seamless integration between the Kinect sensor, the turtlesim node, and the laserscan_to_cmdVel.py script.
+
+## Prerequisites
+
+To use conturtle, you need to have the following installed:
+
+    ROS (Robot Operating System)
+    Kinect v1 sensor
+    freenect_stack package
+
+## Installation
+
+    Clone the conturtle repository into your ROS workspace:
+
+bash
+
+git clone <repository_url>
+
+    Install the freenect_stack package by following the installation instructions provided in its repository.
+
+## Launching conturtle
+
+To start the conturtle project, you need to launch the necessary nodes. The provided launch file, conturtle.launch, handles this for you.
+
+    Open a terminal and navigate to your ROS workspace:
+
+bash
+
+cd <path_to_your_workspace>
+
+    Launch the conturtle nodes using the following command:
+
+bash
+
+roslaunch conturtle conturtle.launch
+
+This will start the Kinect sensor, convert depth images to laser scans, launch the turtlesim node, and run the laserscan_to_cmdVel.py script.
+
+## Customizing the Behavior
+
+To customize the behavior of the conturtle project, you can modify the laserscan_to_cmdVel.py script. This script calculates linear and angular velocities for the turtle based on the laser scan data and publishes them to control the turtle's movement. You can tailor the script according to your specific requirements.
+
+# kinect_writter
+
+The kinect_writter project builds upon the conturtle project and introduces the capability to write with the turtlesim turtle. It enhances the conturtle project by incorporating the position of your hand, as detected by the Kinect's laserscan data. By calculating the error between the current position of the turtle and your hand's position, the project uses a PID controller to derive the desired velocity commands for the turtle, resulting in a writing motion.
+
+## Prerequisites
+
+To use kinect_writter, you need to have the following installed:
+
+    ROS (Robot Operating System)
+    Kinect v1 sensor
+    freenect_stack package
+
+## Installation
+
+    Clone the kinect_writter repository into your ROS workspace:
+
+bash
+
+git clone <repository_url>
+
+    Install the freenect_stack package by following the installation instructions provided in its repository.
+
+## Launching kinect_writter
+
+To start the kinect_writter project, you need to launch the necessary nodes. The provided launch file, kinect_writter.launch, handles this for you.
+
+    Open a terminal and navigate to your ROS workspace:
+
+bash
+
+cd <path_to_your_workspace>
+
+    Launch the kinect_writter nodes using the following command:
+
+bash
+
+roslaunch kinect_writter kinect_writter.launch
+
+This will start the Kinect sensor, convert depth images to laser scans, launch the turtlesim node, and run the laserscan_to_cmdVel.py script.
+
+## Customizing the Behavior
+
+To customize the behavior of the kinect_writter project, you can modify the laserscan_to_cmdVel.py script. This script calculates the error between the turtle's position and your hand's position and utilizes a PID controller to derive the desired velocity commands for the turtle. You can tailor the script according to your specific requirements.
+
+## Additional Resources
+
+For more information and a visual demonstration of the projects, you can refer to the following resources:
+
+    YouTube Video: Example of kinect_writter
+
+## Contact
+
+If you have any questions, suggestions, or feedback regarding the conturtle or kinect_writter projects, please contact [Your Name] at [your_email@example.com].
